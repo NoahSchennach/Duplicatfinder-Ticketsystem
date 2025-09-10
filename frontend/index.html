@@ -30,9 +30,10 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar" style="background-color: #EBEBEB;" data-bs-theme="light">    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Ticket-Dashboard</a>
-      <img
+  <nav class="navbar bg-body-tertiary" data-bs-theme="light">    
+    <div class="container-fluid">
+      <a class="navbar-brand mb-0 h1" href="#">Ticket-Dashboard</a>
+      <img src="img/IBF-Logo.svg" width="50" height="40">
     </div>
   </nav>
 
@@ -44,8 +45,13 @@
     <div class="card shadow-sm mb-4">
       <div class="card-body">
         <form id="ticketForm">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text"  id="inputGroup-sizing-sm">Titel</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+          <!--
           <div class="mb-3">
-            <label for="ticketText" class="form-label">Ticketbeschreibung</label>
+             <label for="ticketText" class="form-label">Ticketbeschreibung</label> -->
             <textarea class="form-control" id="ticketText" rows="3" placeholder="Beschreibe dein Problem..." required></textarea>
           </div>
           <button type="submit" style="background-color:#194f81;" class="btn btn-primary">Ticket prüfen</button>

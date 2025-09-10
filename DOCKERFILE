@@ -1,0 +1,19 @@
+# Node.js als Basisimage
+FROM node:18
+
+# Arbeitsverzeichnis im Container
+WORKDIR /app
+
+# Dependencies installieren
+COPY backend/package*.json ./
+RUN npm install
+
+# Backend & Frontend reinkopieren
+COPY backend/ ./backend/
+COPY frontend/ ./frontend/
+
+# Port öffnen
+EXPOSE 5000
+
+# Start
+CMD ["node", "backend/server.js"]
