@@ -32,26 +32,25 @@ def detect_duplicates():
 
     # Ergebnisse sammeln
     threshold = 0.7
-    results = []
+    duplicates = []
     for i in range(len(ids)):
         for j in range(i + 1, len(ids)):
             score = cosine_scores[i][j].item()
             if score >= threshold:
-                result = {
+                duplicate = {
                 "id1": ids[i],
                 "id2": ids[j],
                 "similarity": round(score * 100, 2)  # in %
             }
-            results.append(result)
-
-    # Ausgabe auf der Konsole
-    print("\nGefundene mögliche Duplikate:")
-    for r in results:
-        print(f"{r['id1']} ↔ {r['id2']} | Ähnlichkeit: {r['similarity']}%")
-    
+            duplicates.append(duplicate)
+                
+    return duplicates
     # API-Response zurückgeben
-    return JSONResponse(content=results)
+    # return JSONResponse(content=duplicates)
 
 # Am Ende deiner Datei
 if __name__ == "__main__":
-    detect_duplicates()  # Funktion aufrufen
+    test_duplicates = detect_duplicates()  # Funktion aufrufen
+    print("\nGefundene mögliche Duplikate:")
+    for d in test_duplicates:
+        print(f"{d['id1']} ↔ {d['id2']} | Ähnlichkeit: {d['similarity']}%")
