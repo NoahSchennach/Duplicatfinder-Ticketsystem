@@ -66,12 +66,19 @@
     }
 
     // Daten beim Laden holen
-   fetch("http://127.0.0.1:8000/api/trelloTickets")
-    .then(response => response.json())
-    .then(data => {
-      console.log(data); // Array mit {id1, id2, similarity}
-      // hier kannst du die Daten in Tabellen oder Charts darstellen
+ fetch("http://127.0.0.1:8000/api/trelloTickets")
+  .then(response => response.json())
+  .then(data => {
+    data.forEach(d => {
+      console.log(`${d.id1} ↔ ${d.id2} | Ähnlichkeit: ${d.similarity}%`);
+
     });
+
+  })
+
+  .catch(error => console.error("Fehler:", error));
+
+ 
  
     // Läuft sofort beim Start
     window.addEventListener("DOMContentLoaded", loadTickets);
