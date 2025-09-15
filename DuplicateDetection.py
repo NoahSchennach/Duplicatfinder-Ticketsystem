@@ -54,3 +54,4 @@ if __name__ == "__main__":
     print("\nGefundene mögliche Duplikate:")
     for d in test_duplicates:
         print(f"{d['id1']} ↔ {d['id2']} | Ähnlichkeit: {d['similarity']}%")
+        
