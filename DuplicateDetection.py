@@ -34,10 +34,12 @@ def detect_duplicates():
         for item in data
     ]
     
-    ids, titles, texts = zip(*sentences)
+    ids, titles, descs = zip(*sentences)
+    
+    texts = [f"{title}. {desc}" for title, desc in zip(titles, descs)]
 
     # Embeddings berechnen
-    embeddings = model.encode(texts, convert_to_tensor=True, normalize_embeddings=False)
+    embeddings = model.encode(texts, convert_to_tensor=True, normalize_embeddings=True)
 
     # Paarweise Ähnlichkeiten berechnen
     cosine_scores = util.cos_sim(embeddings, embeddings)
@@ -54,15 +56,13 @@ def detect_duplicates():
                 "id2": ids[j],
                 "title1" : titles[i],
                 "title2" : titles[j],
-                "desc1" : titles[i],
-                "desc2" : titles[j],
+                "desc1" : descs[i],
+                "desc2" : descs[j],
                 "similarity": round(score * 100, 2)  # in %
-            }
-            duplicates.append(duplicate)
+                }
+                duplicates.append(duplicate)
                 
     return duplicates
-    # API-Response zurückgeben
-    # return JSONResponse(content=duplicates)
 
 # Testausgabe auf der Konsole
 if __name__ == "__main__":
