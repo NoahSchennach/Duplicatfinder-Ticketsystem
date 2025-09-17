@@ -26,11 +26,15 @@ def detect_duplicates():
 
     # Texte vorbereiten
     sentences = [
-        (item["id"], item.get("desc", "").strip() or f"[EMPTY-{item['id']}]")
+        (
+            item["id"], 
+            item.get("name", "").strip() or f"[NO-TITLE-{item['id']}]",
+            item.get("desc", "").strip() or f"[EMPTY-{item['id']}]"
+        )
         for item in data
     ]
     
-    ids, texts = zip(*sentences)
+    ids, titles, texts = zip(*sentences)
 
     # Embeddings berechnen
     embeddings = model.encode(texts, convert_to_tensor=True, normalize_embeddings=False)
@@ -48,6 +52,10 @@ def detect_duplicates():
                 duplicate = {
                 "id1": ids[i],
                 "id2": ids[j],
+                "title1" : titles[i],
+                "title2" : titles[j],
+                "desc1" : titles[i],
+                "desc2" : titles[j],
                 "similarity": round(score * 100, 2)  # in %
             }
             duplicates.append(duplicate)
@@ -56,9 +64,9 @@ def detect_duplicates():
     # API-Response zurückgeben
     # return JSONResponse(content=duplicates)
 
-# Am Ende deiner Datei
+# Testausgabe auf der Konsole
 if __name__ == "__main__":
     test_duplicates = detect_duplicates()  # Funktion aufrufen
     print("\nGefundene mögliche Duplikate:")
     for d in test_duplicates:
-        print(f"{d['id1']} ↔ {d['id2']} | Ähnlichkeit: {d['similarity']}%")
+        print(f"{d['title1']} ↔ {d['title2']} | Ähnlichkeit: {d['similarity']}%")
