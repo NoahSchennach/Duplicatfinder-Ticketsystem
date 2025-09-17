@@ -7,7 +7,7 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="loading-bar/dist/loading-bar.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ldbar/dist/ldbar.min.css">
 
   <style>
     body, html {
@@ -16,7 +16,7 @@
       background-color: #ffffff;
     }
     .content { padding: 2rem; }
-    .ldBar { width: 150px; height: 150px; margin: 1rem auto; }
+    .ldBar { width: 100px; height: 100px; margin: 1rem auto; }
   </style>
 </head>
 <body>
@@ -25,7 +25,7 @@
   <nav class="navbar bg-body-tertiary" data-bs-theme="light">    
     <div class="container-fluid">
       <a class="navbar-brand mb-0 h1" href="#">Ticket-Dashboard</a>
-      <img src="img/IBF-Logo.svg" width="50" height="40">
+      <img src="/frontend/img/IBF-Logo.svg" width="50" height="40">
     </div>
   </nav>
 
@@ -33,22 +33,21 @@
   <main class="content">
     <h3>Ähnliche Tickets</h3>
 
-    <div class="row" id="resultsContainer">
-      <!-- Vergleichsergebnisse kommen hier rein -->
-
-    </div>
+    <!-- Container für die Karten -->
+    <div class="row" id="resultsContainer"></div>
   </main>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="loading-bar/dist/loading-bar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ldbar/dist/ldbar.min.js"></script>
 
   <script>
+    // Funktion zum Rendern eines Tickets
     function renderResult(ticketId, similarity, title) {
       const container = document.getElementById("resultsContainer");
 
       const col = document.createElement("div");
-      col.className = "col-md-4";
+      col.className = "col-md-4 mb-3";
 
       col.innerHTML = `
         <div class="card text-center shadow-sm">
@@ -61,26 +60,29 @@
       `;
       container.appendChild(col);
 
+      // Ladebalken setzen
       const bar = new ldBar(`#bar-${ticketId}`);
       bar.set(similarity);
     }
 
-    // Daten beim Laden holen
- fetch("http://127.0.0.1:8000/api/trelloTickets")
-  .then(response => response.json())
-  .then(data => {
-    data.forEach(d => {
-      console.log(`${d.id1} ↔ ${d.id2} | Ähnlichkeit: ${d.similarity}%`);
+    // Funktion zum Laden der Tickets vom Backend
+    function loadTickets() {
+      fetch("http://127.0.0.1:8000/api/trelloTickets")
+        .then(response => response.json())
+        .then(data => {
 
-    });
+           // Hier überprüfen, was tatsächlich zurückkommt
+            console.log("Daten vom Backend:", data);
 
-  })
+          data.forEach(d => {
+            renderResult(d.id1, d.similarity, d.id2); // Hier kannst du title anpassen, falls verfügbar
+            renderResult(d.id2. d.similarity, d.id1);
+          });
+        })
+        .catch(error => console.error("Fehler beim Laden der Tickets:", error));
+    }
 
-  .catch(error => console.error("Fehler:", error));
-
- 
- 
-    // Läuft sofort beim Start
+    // Beim Laden der Seite Tickets abrufen
     window.addEventListener("DOMContentLoaded", loadTickets);
   </script>
 

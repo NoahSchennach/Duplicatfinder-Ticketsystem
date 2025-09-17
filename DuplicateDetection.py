@@ -1,6 +1,6 @@
 import json
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer, util
 
 # Modell laden (einmalig beim Start)
@@ -8,6 +8,14 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # FastAPI-App
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # später besser auf die Frontend-Domain eingrenzen
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/api/trelloTickets")
 
