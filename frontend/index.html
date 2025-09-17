@@ -41,19 +41,23 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ldbar/dist/ldbar.min.js"></script>
 
+  <!-- Loading Bar -->
+  <script src="/frontend/loading-bar/dist/loading-bar.min.js"></script>
+
   <script>
     // Funktion zum Rendern eines Tickets
-    function renderResult(ticketId, similarity, title) {
+    function renderResult(ticket1, ticket2, similarity) {
       const container = document.getElementById("resultsContainer");
-
+ 
       const col = document.createElement("div");
       col.className = "col-md-4 mb-3";
+      const barId = `bar-${Math.random().toString(36).substr(2, 9)}`;
 
       col.innerHTML = `
         <div class="card text-center shadow-sm">
           <div class="card-body">
-            <h6 class="card-title">#${ticketId}: ${title}</h6>
-            <div id="bar-${ticketId}" class="ldBar label-center" data-preset="circle" data-value="0"></div>
+            <h6 class="card-title">${ticket1} : ${ticket2}</h6>
+            <div id="${barId}" class="ldBar label-center" data-preset="circle" data-value="0"></div>
             <p class="mt-2">Ähnlichkeit: <strong>${similarity}%</strong></p>
           </div>
         </div>
@@ -61,7 +65,7 @@
       container.appendChild(col);
 
       // Ladebalken setzen
-      const bar = new ldBar(`#bar-${ticketId}`);
+      const bar = new ldBar(`#${barId}`);
       bar.set(similarity);
     }
 
@@ -75,8 +79,7 @@
             console.log("Daten vom Backend:", data);
 
           data.forEach(d => {
-            renderResult(d.title1, d.similarity, d.title2);
-            renderResult(d.title2, d.similarity, d.title1);
+            renderResult(d.title1, d.title2, d.similarity);
           });
         })
         .catch(error => console.error("Fehler beim Laden der Tickets:", error));
