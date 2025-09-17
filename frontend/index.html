@@ -78,8 +78,8 @@
             console.log("Daten vom Backend:", data);
 
           data.forEach(d => {
-            renderResult(d.id1, d.similarity, d.id2); // Hier kannst du title anpassen, falls verfügbar
-            renderResult(d.id2. d.similarity, d.id1);
+            renderResult(d.title1, d.similarity, d.title2);
+            renderResult(d.title2, d.similarity, d.title1);
           });
         })
         .catch(error => console.error("Fehler beim Laden der Tickets:", error));
