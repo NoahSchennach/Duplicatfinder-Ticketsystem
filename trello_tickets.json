@@ -1,27 +1,32 @@
 [
     {
-        "id": "68b896a67c74640b9dc083fa",
-        "name": "#1",
-        "description": "Test 1 für ein Ticket"
-    },
-    {
-        "id": "68b8a1ca52c7c1cab0264c66",
-        "name": "#2",
-        "description": "zweites angelegtes Ticket"
-    },
-    {
-        "id": "68b8a1d7ce3e146e77cf7f5f",
-        "name": "#3",
-        "description": "Ticket Nummer 3"
-    },
-    {
         "id": "68bf2e4ef49485a3d40bbc5f",
-        "name": "Test 4 für ein Ticket",
-        "description": ""
+        "name": "Herausforderungen",
+        "description": "Das Leben bietet ständig neue Herausforderungen, doch jede Schwierigkeit trägt auch die Chance in sich, daran zu wachsen. Wer offen bleibt und nicht aufgibt, kann aus Rückschlägen wertvolle Erfahrungen ziehen. So wird selbst aus Fehlern ein Wegweiser, der langfristig zu mehr Stärke und Gelassenheit führt."
     },
     {
-        "id": "68c118044745dd7053518a39",
-        "name": "Test 2",
-        "description": ""
+        "id": "68cacc6b63b4385993286f99",
+        "name": "Aufgabe",
+        "description": "Ziel ist es, eine funktionsfähigen Duplicatefinder zu erstellen und ihn in ein System zu integrieren."
+    },
+    {
+        "id": "68cacc70cd35488baff5ce6e",
+        "name": "Unittest Backend",
+        "description": "In diesem Ticket muss das Backend getestet werden. Dazu zählt die Funktionalität des Codes, ob der Code dokumentiert worden ist und ob alle Einrückungen stimmen."
+    },
+    {
+        "id": "68cacc75841e7be7c107dd33",
+        "name": "Unittest Frontend",
+        "description": "Bei diesem Test wird das Frontend getestet. Dazu zählt die Funktionalität, sprich ob die Oberfläche so funktioniert, wie es soll. Außerdem wird die Benutzerfreundlichkeit überprüft."
+    },
+    {
+        "id": "68c1d092760ab0f26e82ef3d",
+        "name": "der Herbst",
+        "description": "Der Herbst verwandelt die Landschaft in ein farbenfrohes Gemälde. Bäume leuchten in Rot- und Goldtönen, während kühle Winde den Alltag begleiten. Spaziergänge durch raschelndes Laub laden zur Ruhe ein, und die kürzer werdenden Tage schenken Gelegenheit, sich ins Warme zurückzuziehen und gemütliche Abende zu genießen."
+    },
+    {
+        "id": "68cad27bbae4bdf782a0427f",
+        "name": "Test Code",
+        "description": "Es soll der Programmiercode getestet werden, ob er einwandfrei funktioniert und ob alle Kommentare geschrieben wurden."
     }
 ]
