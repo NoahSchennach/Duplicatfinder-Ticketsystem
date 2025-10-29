@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer, util
 
-# Modell laden (einmalig beim Start)
+# KI-Modell in das Skript laden
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # FastAPI-App
@@ -20,8 +20,8 @@ app.add_middleware(
 @app.get("/api/trelloTickets")
 
 def detect_duplicates():
-    # JSON-Datei einlesen (später evtl. direkt Trello-API)
-    with open("trello_tickets.json", "r", encoding="utf-8") as f:
+    # JSON-Datei einlesen
+    with open("data/trello_tickets.json", "r", encoding="utf-8") as f:
         data = json.load(f)
 
     # Texte vorbereiten
@@ -43,9 +43,9 @@ def detect_duplicates():
 
     # Paarweise Ähnlichkeiten berechnen
     cosine_scores = util.cos_sim(embeddings, embeddings)
-
+    
     # Ergebnisse sammeln
-    threshold = 0.7
+    threshold = 0.4
     duplicates = []
     for i in range(len(ids)):
         for j in range(i + 1, len(ids)):
