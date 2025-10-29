@@ -3,81 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ticket Dashboard</title>
+  <title>Duplicatefinder</title>
 
-  <!-- Bootstrap CSS -->
+  <!-- Frameworks -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ldbar/dist/ldbar.min.css">
+  <link rel="stylesheet" href="style.css">
 
- 
-  <style>
-    body {
-      background: #ffffff;
-      font-family: 'Inter', sans-serif;
-      color: #212529;
-    }
-    .navbar {
-      border-bottom: 1px solid #eaeaea;
-    }
-    .hero {
-      padding: 100px 20px;
-      text-align: center;
-    }
-    .hero h1 {
-      font-weight: 600;
-      font-size: 2.5rem;
-    }
-    .card {
-      border: 1px solid #eaeaea;
-      border-radius: 0.75rem;
-      transition: all 0.2s ease;
-    }
-    .card:hover {
-      border-color: #000;
-    }
-    .card-icon {
-      font-size: 2.5rem;
-      color: #212529;
-      margin-bottom: 15px;
-    }
-    footer {
-      border-top: 1px solid #eaeaea;
-      padding: 20px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #6c757d;
-    }
-  </style>
+  <script defer src="app.js"></script>
 </head>
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar bg-white">
-    <div class="container">
-      <a class="navbar-brand fw-semibold" href="#">Duplicatefinder</a>
-        <img src="/frontend/img/HTL-Logo.png" 
-          alt="Logo" width="150" height="60" class="d-inline-block align-text-top">
+  <nav class="navbar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a class="navbar-brand" href="#">Duplicatefinder</a>
+      <img src="/frontend/img/HTL-Logo.png" alt="Logo" width="140">
     </div>
   </nav>
-<!-- Hero -->
-  <section class="hero">
+
+  <!-- Hero Section -->
+  <section class="hidden hero-section py-5 text-center text-white">
     <div class="container">
       <h1>Duplicatefinder</h1>
-      <p class="text-muted mt-3">hier werden Tickets auf Ähnlichkeiten geprüft und ausgegeben</p>
+      <p>Dieses Ticketsystem analysiert automatisch eingehende Tickets und prüft sie auf inhaltliche Überschneidungen.</p>
     </div>
   </section>
 
-  
+  <!-- Results Grid -->
+  <main class="hidden">
+    <div class="container pb-5">
+      <div class="row g-4" id="resultsContainer"></div>
+    </div>
+  </main>
 
+  <footer>© HTL Reutte – Duplicatefinder Dashboard</footer>
 
- <main class="content">
-  <div class="container">
-    <div class="row" id="resultsContainer"></div>
-  </div>
-</main>
-
-
-  <!-- Bootstrap JS -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ldbar/dist/ldbar.min.js"></script>
 
@@ -87,43 +49,47 @@
   <script>
     // Funktion zum Rendern eines Tickets
     function renderResult(ticket1, ticket2, similarity) {
-      const container = document.getElementById("resultsContainer");
- 
-      const col = document.createElement("div");
-      col.className = "col-md-4 mb-3";
-      const barId = `bar-${Math.random().toString(36).substr(2, 9)}`;
+  const container = document.getElementById("resultsContainer");
 
-      col.innerHTML = `
-        <div class="card text-center shadow-sm">
-          <div class="card-body">
-            <h6 class="card-title">${ticket1} : ${ticket2}</h6>
-            <div id="${barId}" class="ldBar label-center" data-preset="circle" data-value="0"></div>
-            <p class="mt-2">Ähnlichkeit: <strong>${similarity}%</strong></p>
-          </div>
-        </div>
-      `;
-      container.appendChild(col);
+  const col = document.createElement("div");
+  col.className = "col-md-4 mb-3 hidden"; // Start mit hidden
+  const barId = "bar-" + Math.floor(Math.random() * 1000000);
 
-      // Ladebalken setzen
-      const bar = new ldBar(`#${barId}`);
-      bar.set(similarity);
-    }
+  col.innerHTML = `
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title">${ticket1} : ${ticket2}</h6>
+        <div id="${barId}" class="ldBar label-center mt-2" data-preset="circle"></div>
+        <p class="mt-2"><strong>${similarity}%</strong></p>
+      </div>
+    </div>
+  `;
+  container.appendChild(col);
+
+  const bar = new ldBar(`#${barId}`);
+  bar.set(similarity);
+
+  // Beobachten, damit Animation beim Scrollen startet
+  observer.observe(col);
+}
+
 
     // Funktion zum Laden der Tickets vom Backend
     function loadTickets() {
-      fetch("http://127.0.0.1:8000/api/trelloTickets")
-        .then(response => response.json())
-        .then(data => {
+  fetch("http://127.0.0.1:8000/api/trelloTickets")
+    .then(response => response.json())
+    .then(data => {
+      console.log("Daten vom Backend:", data);
 
-           // Hier überprüfen, was tatsächlich zurückkommt
-            console.log("Daten vom Backend:", data);
+      data.forEach((d, index) => {
+        setTimeout(() => {
+          renderResult(d.title1, d.title2, d.similarity);
+        }, index * 200); // 200ms Abstand zwischen den Karten
+      });
+    })
+    .catch(error => console.error("Fehler beim Laden der Tickets:", error));
+}
 
-          data.forEach(d => {
-            renderResult(d.title1, d.title2, d.similarity);
-          });
-        })
-        .catch(error => console.error("Fehler beim Laden der Tickets:", error));
-    }
 
     // Beim Laden der Seite Tickets abrufen
     window.addEventListener("DOMContentLoaded", loadTickets);

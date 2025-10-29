@@ -45,7 +45,7 @@ def detect_duplicates():
     cosine_scores = util.cos_sim(embeddings, embeddings)
 
     # Ergebnisse sammeln
-    threshold = 0.7
+    threshold = 0.3
     duplicates = []
     for i in range(len(ids)):
         for j in range(i + 1, len(ids)):
