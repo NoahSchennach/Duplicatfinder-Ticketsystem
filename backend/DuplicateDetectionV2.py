@@ -53,6 +53,7 @@ def load_from_db():
     conn.close()
     return data
 
+
 # ----------------------- Duplicate Detection -----------------
 @app.get("/api/trelloTickets")
 def detect_duplicates():

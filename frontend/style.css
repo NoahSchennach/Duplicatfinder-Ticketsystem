@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap');
+
+body {
+  background-color: #0d0d0f;
+  color: #e6e6e6;
+  font-family: 'Poppins', sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #0d0d0f;
+  padding: 15px 0;
+  border-bottom: 1px solid #1f1f23;
+}
+
+.navbar-brand {
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 0.6px;
+}
+
+.navbar img {
+  filter: brightness(0.9);
+  transition: .3s;
+}
+
+.navbar img:hover {
+  filter: brightness(1);
+}
+
+/* Hero */
+.hero {
+  padding: 70px 20px 30px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+.hero p {
+  color: #9a9a9a;
+  font-size: 1rem;
+}
+
+/* Cards */
+.card {
+  background: #1a1b20;
+  border: 1px solid #2a2b30;
+  border-radius: 18px;
+  padding: 24px;
+  text-align: center;
+  transition: 0.3s ease;
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: #3c7bff;
+  box-shadow: 0 0 20px rgba(62, 129, 255, 0.3);
+}
+
+.card-title {
+  font-weight: 700;
+  color: #f2f2f2;
+  margin-bottom: 18px;
+  font-size: 1.1rem;
+}
+
+/* ldBar Styling (sichtbar & Zentrierung) */
+.ldBar {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
+  display: block;
+}
+
+.ldBar path.mainline {
+  stroke: #3c7bff !important;
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.ldBar path.baseline {
+  stroke: #2b2c31 !important;
+  stroke-width: 8;
+}
+
+
+
+/* untere Prozent-Anzeige (formatiert) */
+.perc-text {
+  margin-top: 10px;
+  color: #9aa8ff;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Grid */
+#resultsContainer .col-md-4 {
+  display: flex;
+  padding-bottom: 20px;
+}
+
+.card strong {
+  color: #3c7bff;
+}
+
+/* Footer */
+footer {
+  padding: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 40px;
+  border-top: 1px solid #1f1f23;
+}
+
+.hidden,
+.show {
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out, filter 0.8s ease-out;
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  filter: blur(8px);
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+

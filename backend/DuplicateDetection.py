@@ -44,6 +44,7 @@ def detect_duplicates():
     # Paarweise Ähnlichkeiten berechnen
     cosine_scores = util.cos_sim(embeddings, embeddings)
     
+    
     # Ergebnisse sammeln
     threshold = 0.4
     duplicates = []
