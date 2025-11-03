@@ -12,7 +12,7 @@ load_dotenv()
 SOURCE = os.getenv("SOURCE", "json").lower()  # "json" oder "db"
 JSON_CANDIDATES = [Path("data/trello_tickets.json"), Path("trello_tickets.json")]
 
-# SBERT-Modell einmalig laden
+# SBERT-Modell in das Skript laden
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # ----------------------- FastAPI-App -------------------------
@@ -20,7 +20,7 @@ app = FastAPI(title="Duplicate Finder API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # für Produktion einschränken
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,6 +30,7 @@ app.add_middleware(
 def load_data():
     return load_from_db() if SOURCE == "db" else load_from_json()
 
+# ----------------------- JSON-Datenquelle --------------------
 def load_from_json():
     for p in JSON_CANDIDATES:
         if p.exists():
@@ -37,6 +38,7 @@ def load_from_json():
                 return json.load(f)
     return []  # kein File gefunden
 
+# ----------------------- Datenbank-Datenquelle --------------
 def load_from_db():
     conn = mysql.connector.connect(
         host=os.getenv("DB_HOST", "127.0.0.1"),
@@ -46,7 +48,6 @@ def load_from_db():
         port=int(os.getenv("DB_PORT", "3306")),
     )
     cur = conn.cursor(dictionary=True)
-    # Alias auf Trello-Keys (name/desc), damit der Rest des Codes identisch bleibt
     cur.execute("SELECT id, title AS name, description AS `desc` FROM ticket ORDER BY id")
     data = cur.fetchall()
     cur.close()
@@ -55,11 +56,13 @@ def load_from_db():
 
 
 # ----------------------- Duplicate Detection -----------------
-@app.get("/api/trelloTickets")
+@app.get("/api/Duplicates")
+
+# Methode zur Duplikaterkennung
 def detect_duplicates():
     data = load_data()
-
-    sentences = [
+    # Vorbereitung der Ticketdaten
+    tickets = [
         (
             item["id"],
             (item.get("name") or "").strip() or f"[NO-TITLE-{item['id']}]",
@@ -68,22 +71,26 @@ def detect_duplicates():
         for item in data
     ]
 
-    if not sentences:
+    if not tickets:
         return []
 
-    ids, titles, descs = zip(*sentences)
+    ids, titles, descs = zip(*tickets)
     texts = [f"{t}. {d}" for t, d in zip(titles, descs)]
     if len(texts) < 2:
         return []
 
+    # Embeddings erzeugen
     embeddings = model.encode(texts, convert_to_tensor=True, normalize_embeddings=True)
-    cosine_scores = util.cos_sim(embeddings, embeddings)
+    
+    # Kosinus-Ähnlichkeiten zwischen den Tickets berechnen
+    similarities = util.cos_sim(embeddings, embeddings)
 
+    # Duplikate basierend auf einem Ähnlichkeitsschwellenwert identifizieren und herausfiltern
     threshold = 0.40
     duplicates = []
     for i in range(len(ids)):
         for j in range(i + 1, len(ids)):
-            score = cosine_scores[i][j].item()
+            score = similarities[i][j].item()
             if score >= threshold:
                 duplicates.append({
                     "id1": ids[i], "id2": ids[j],
@@ -93,10 +100,8 @@ def detect_duplicates():
                 })
     return duplicates
 
-# ----------------------- CLI-Test ----------------------------
+# ----------------------- Testausgabe im Terminal ----------------------------
 if __name__ == "__main__":
     print("Testlauf… Quelle:", SOURCE)
     for d in detect_duplicates():
         print(f"{d['title1']} ↔ {d['title2']} | Ähnlichkeit: {d['similarity']}%")
-
- 
