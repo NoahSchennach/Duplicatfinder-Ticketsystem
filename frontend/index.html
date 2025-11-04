@@ -74,12 +74,14 @@
 }
 
 
-    // Funktion zum Laden der Tickets vom Backend
+
+
+  // Funktion zum Laden der Tickets vom Backend
   function loadTickets() {
-    fetch("http://127.0.0.1:8000/api/trelloTickets")
-      .then(response => response.json())
-      .then(data => {
-        console.log("Daten vom Backend:", data);
+  fetch("http://127.0.0.1:8000/api/Duplicates")
+    .then(response => response.json())
+    .then(data => {
+      console.log("Daten vom Backend:", data);
 
         data.forEach((d, index) => {
           setTimeout(() => {
